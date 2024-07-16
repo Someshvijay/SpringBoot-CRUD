@@ -1,12 +1,14 @@
 package com.somesh.Spring_boot.FirstProject.service;
 
 import com.somesh.Spring_boot.FirstProject.entity.Department;
+import com.somesh.Spring_boot.FirstProject.error.DepartmentNotFoundException;
 import com.somesh.Spring_boot.FirstProject.repository.DepartmentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 @Service
 public class DepartmentServiceImpl implements DepartmentService{
@@ -29,8 +31,13 @@ public class DepartmentServiceImpl implements DepartmentService{
     //uses the repository's findById method to get the data by its id from the database
     //findById(departmentId) - will return optional we need to add ".get()" to get the values
     @Override
-    public Department fetchDepartmentById(Long departmentId) {
-        return departmentRepository.findById(departmentId).get();
+    public Department fetchDepartmentById(Long departmentId) throws DepartmentNotFoundException {
+        Optional<Department> department = departmentRepository.findById(departmentId);
+        if(!department.isPresent()){
+            throw new DepartmentNotFoundException("Department Not Available");
+        }
+
+        return department.get();
     }
 
     @Override

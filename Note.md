@@ -256,3 +256,63 @@ Service Class
 
     }
 ```
+
+
+## Hibernate Validators
+
+| Annotation          | Description                                                                                  |
+|---------------------|----------------------------------------------------------------------------------------------|
+| `@NotNull`          | A field annotated with this should not be null.                                              |
+| `@NotEmpty`         | A field annotated with this should not be empty.                                             |
+| `@NotBlank`         | This field should not be null, not empty, and not blank.                                     |
+| `@Min`              | Given minimum value has to be satisfied.                                                     |
+| `@Max`              | Given maximum value has to be satisfied.                                                     |
+| `@Size(min=x, max=y)` | Field size should be less than or greater than the specified field size.                     |
+| `@Email`            | Email can be validated with this.                                                             |
+| `@Pattern(regexp=”pattern”)` | Given RegEx pattern has to be satisfied.                                                 |
+| `@Digits(integer=x, fraction=y)` | Validates that the field value consists only of digits, with the specified number of integer and fractional digits allowed. |
+| `@Positive`         | The field value must be a positive number (greater than zero).                               |
+| `@NegativeOrZero`   | The field value must be either zero or a negative number.                                    |
+| `@Future`           | The field value must represent a date and time in the future (after the current instant).     |
+| `@FutureOrPresent`  | The field value must represent a date and time either in the present or the future.           |
+| `@PastOrPresent`    | The field value must represent a date and time either in the past or the present.            |
+| `@Range(min=x, max=y)` | The field value must be within the specified range (inclusive of both min and max values).    |
+| `@URL`              | Validates the field as a valid URL according to a predefined regex pattern.                   |
+| `@CreditCardNumber` | Validates the field as a valid credit card number according to the Luhn algorithm.            |
+
+
+Entity Class
+```java
+    @NotBlank(message = "Please Add Department Name")
+    private String departmentName;
+    private String departmentAddress;
+    private String departmentCode;
+```
+
+Controller Class
+```java
+    @PostMapping("/departments") //Annotating Post API endpoint
+    public Department saveDepartment(@Valid @RequestBody Department department){
+        return departmentService.saveDepartment(department);
+    }
+```
+
+
+## Logger
+
+Controller Class
+```java
+    private final Logger LOGGER = LoggerFactory.getLogger(DepartmentController.class);
+
+    @PostMapping("/departments") //Annotating Post API endpoint
+    public Department saveDepartment(@Valid @RequestBody Department department){
+    LOGGER.info("Inside saveDepartment of DepartmentController");
+    return departmentService.saveDepartment(department);
+}
+
+    @GetMapping("/departments")
+    public List<Department> fetchDepartment(){
+    LOGGER.info("Inside fetchDepartmentList of DepartmentController");
+    return departmentService.fetchDepartmentList();
+}
+```
