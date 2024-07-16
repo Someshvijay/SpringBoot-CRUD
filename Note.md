@@ -7,7 +7,7 @@ Documentation available that we can ue to change config of
 application property by referring all properties in that doc.
 ```
 
-
+#### Refer https://docs.spring.io/spring-data/jpa/reference/jpa/query-methods.html
 
 
 ### Reference
