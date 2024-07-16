@@ -112,3 +112,147 @@ public class DepartmentServiceImpl implements DepartmentService{
 
 ```
 #### Entity - behaves like a schema
+
+
+## GET Request
+
+Controller Class
+```java
+    @GetMapping("/departments")
+    public List<Department> fetchDepartment(){
+        return departmentService.fetchDepartmentList();
+    }
+
+    @GetMapping("/departments/{id}")
+    public Department fetchDepartmentById(@PathVariable("id") Long departmentId ){
+        return departmentService.fetchDepartmentById(departmentId);
+    }
+    
+    @GetMapping("/departments/name/{name}")
+    public Department fetchDepartmentByName(@PathVariable("name") String departmentName){
+        return departmentService.fetchDepartmentByName(departmentName);
+    }
+    
+
+```
+
+Service Class
+```java
+//uses the repository's findAll method to get all the data from the database
+    @Override
+    public List<Department> fetchDepartmentList() {
+        return departmentRepository.findAll();
+    }
+
+    //uses the repository's findById method to get the data by its id from the database
+    //findById(departmentId) - will return optional we need to add ".get()" to get the values
+    @Override
+    public Department fetchDepartmentById(Long departmentId) {
+        return departmentRepository.findById(departmentId).get();
+    }
+
+    @Override
+    public Department fetchDepartmentByName(String departmentName) {
+        return departmentRepository.findByDepartmentName(departmentName);
+    }
+
+```
+
+Repository Interface
+```java
+package com.somesh.Spring_boot.FirstProject.repository;
+
+import com.somesh.Spring_boot.FirstProject.entity.Department;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+@Repository  //In Spring Boot, a repository is used to manage data persistence and retrieval in a database
+
+// JpaRepository<Department, Long> == <Department - Entity> <Long - primary key type>
+public interface DepartmentRepository extends JpaRepository<Department, Long> {
+
+    //E
+    //custom repository method to get department by name, spring automatically does the logic
+    //syntax should start with findBy{attribute name} in camel case correctly as it is in database.
+    public Department findByDepartmentName(String departmentName);
+
+    //custom method with ignore case
+    public Department findByDepartmentNameIgnoreCase(String departmentName);
+    
+    //use - @Query()
+    // public method --
+    // and pass the jpl or sql native query for complex actions that cannot be given by spring jpa as it is.
+}
+```
+
+## POST Request
+
+Controller Class
+```java
+    @PostMapping("/departments") //Annotating Post API endpoint
+    public Department saveDepartment(@RequestBody Department department){
+        return departmentService.saveDepartment(department);
+    }
+```
+
+Service Class
+```java
+//uses the repository's save method to insert into database
+    @Override
+    public Department saveDepartment(Department department) {
+        return departmentRepository.save(department);
+    }
+```
+
+## Delete Request
+
+Controller Class
+```java
+    @DeleteMapping("/departments/{id}")
+    public String deleteDepartmentById(@PathVariable("id") Long departmentId){
+        departmentService.deleteDepartmentById(departmentId);
+        return "Department Deleted Successfully";
+    }
+```
+
+Service Class
+```java
+    @Override
+    public void deleteDepartmentById(Long departmentId) {
+        departmentRepository.deleteById(departmentId);
+    }
+```
+
+## PUT Request
+Controller Class
+```java
+    @PutMapping("/departments/{id}")
+    public Department updateDepartment(@PathVariable("id") Long departmentId, @RequestBody Department department){
+        return departmentService.updateDepartment(departmentId,department);
+    }
+```
+
+Service Class
+```java
+//Finding the data from the database by id and storing the department object into debDB
+//checking if our the request for update has a not null and non-blank object for all attributes
+//If so we need to update it,so we use setDepartment
+    @Override
+    public Department updateDepartment(Long departmentId, Department department) {
+        Department depDB = departmentRepository.findById(departmentId).get();
+        if(Objects.nonNull(department.getDepartmentName()) && !"".equalsIgnoreCase(department.getDepartmentName())){
+            depDB.setDepartmentName(department.getDepartmentName());
+        }
+
+        if(Objects.nonNull(department.getDepartmentCode()) && !"".equalsIgnoreCase(department.getDepartmentCode())){
+            depDB.setDepartmentCode(department.getDepartmentCode());
+        }
+
+        if(Objects.nonNull(department.getDepartmentAddress()) && !"".equalsIgnoreCase(department.getDepartmentAddress())){
+            depDB.setDepartmentAddress(department.getDepartmentAddress());
+        }
+
+        return departmentRepository.save(depDB);
+
+    }
+```
