@@ -316,3 +316,31 @@ Controller Class
     return departmentService.fetchDepartmentList();
 }
 ```
+
+### Jar
+Build a Jar file that can be deployed on a deployment server,
+
+To Build one:
+```shell
+mvn clean install
+
+#This will do a clean install and build the jar. it will also needs to run all the test cases for it to be suceesfull
+```
+To run a jar file:
+```shell
+#--spring.profiles.active=prod == to deploy this into prod as our default right now is qa.
+
+java -jar Spring-boot-FirstProject-1.0.0.jar --spring.profiles.active=prod
+```
+
+## Acutator
+
+The actuator mainly exposes operational information about the running application — health, metrics, info, dump, env, etc
+
+```xml
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-actuator</artifactId>
+</dependency>
+```
+

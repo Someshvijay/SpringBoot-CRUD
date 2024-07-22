@@ -1,0 +1,103 @@
+server:
+  port: 8080
+
+spring:
+  profiles:
+    active: qa
+  h2:
+    console:
+      enabled: true
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+
+---
+spring:
+  config:
+    activate:
+      on-profile: dev
+  application:
+    name: Spring-boot-FirstProject
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQLDialect
+    show-sql: true
+
+  datasource:
+    url: jdbc:mysql://127.0.0.1:3306/dcbapp
+    username: root
+    password: Somesh2001#
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+welcome:
+  message: "Welcome to MyPage AAAA"
+
+---
+spring:
+  config:
+    activate:
+      on-profile: qa
+  application:
+    name: Spring-boot-FirstProject
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQLDialect
+    show-sql: true
+
+  datasource:
+    url: jdbc:mysql://127.0.0.1:3306/dcbapp-qa
+    username: root
+    password: Somesh2001#
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+welcome:
+  message: "Welcome to MyPage AAAA"
+
+---
+spring:
+  config:
+    activate:
+      on-profile: prod
+  application:
+    name: Spring-boot-FirstProject
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQLDialect
+    show-sql: true
+
+  datasource:
+    url: jdbc:mysql://127.0.0.1:3306/dcbapp-prod
+    username: root
+    password: Somesh2001#
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+welcome:
+  message: "Welcome to MyPage AAAA"
+
+# Uncomment the following lines if you need to enable the H2 console and use H2 database
+# spring:
+#   h2:
+#     console:
+#       enabled: true
+#   datasource:
+#     url: jdbc:h2:mem:dcbapp
+#     driverClassName: org.h2.Driver
+#     username: sa
+#     password: password
+#   jpa:
+#     database-platform: org.hibernate.dialect.H2Dialect
